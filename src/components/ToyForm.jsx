@@ -1,9 +1,26 @@
 import React from "react";
 
-function ToyForm() {
+function ToyForm({ addToy }) {
+  function handleSubmit(e) {
+    e.preventDefault();
+    const newToy = {
+      name: e.target.elements.name.value,
+      image: e.target.elements.image.value,
+      likes: 0,
+    };
+    fetch("http://localhost:3001/toys", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(newToy),
+    })
+      .then((response) => response.json())
+      .then((data) => addToy(data));
+  }
   return (
     <div className="container">
-      <form className="add-toy-form">
+      <form className="add-toy-form" onSubmit={handleSubmit}>
         <h3>Create a toy!</h3>
         <input
           type="text"
